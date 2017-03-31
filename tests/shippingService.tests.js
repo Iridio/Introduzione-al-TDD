@@ -1,17 +1,77 @@
-const assert = require('chai').assert;
+const expect = require('chai').expect;
 const ShippingService = require('../src/shippingService');
 
 describe('ShippingService Tests', () => {
-  it('should return a number if valid params are passed', () => {
-    const products = [
-      { code: 'ART1', quantity: 2 },
-      { code: 'ART2', quantity: 1 },
-    ];
-    const courier = 'DHL';
-    const courierService = 'Standard';
-    const destination = 'ITA';
+  it('should returns false if no parameters are passed', () => {
+    const result = ShippingService.getShippingFees();
+    expect(result).to.have.property('requestValid', false);
+    expect(result).to.have.property('shippingFees', 0);
+    expect(result).to.have.property('message', 'Specificare i parametri della richiesta');
+  });
 
-    const shippingFees = ShippingService.getShippingFees(products, courier, courierService, destination);
-    assert.equal('number', typeof shippingFees);
+  it('should returns false if products are not valid', () => {
+    const params = {};
+    const result = ShippingService.getShippingFees(params);
+    expect(result).to.have.property('requestValid', false);
+    expect(result).to.have.property('shippingFees', 0);
+    expect(result).to.have.property('message', 'Specificare l\'elenco dei prodotti');
+  });
+
+  it('should returns false if courier is empty', () => {
+    const params = {
+      products: [
+        { code: 'ART1', quantity: 2, pricePerUnit: 34.5, volume: 6000000, weight: 250 },
+        { code: 'ART2', quantity: 1, pricePerUnit: 89.90, volume: 40000000, weight: 450 },
+      ],
+    };
+    const result = ShippingService.getShippingFees(params);
+    expect(result).to.have.property('requestValid', false);
+    expect(result).to.have.property('shippingFees', 0);
+    expect(result).to.have.property('message', 'Specificare il corriere');
+  });
+
+  it('should returns false if courierService is empty', () => {
+    const params = {
+      products: [
+        { code: 'ART1', quantity: 2, pricePerUnit: 34.5, volume: 6000000, weight: 250 },
+        { code: 'ART2', quantity: 1, pricePerUnit: 89.90, volume: 40000000, weight: 450 },
+      ],
+      courier: 'DHL',
+    };
+    const result = ShippingService.getShippingFees(params);
+    expect(result).to.have.property('requestValid', false);
+    expect(result).to.have.property('shippingFees', 0);
+    expect(result).to.have.property('message', 'Specificare il servizio del corriere');
+  });
+
+  it('should returns false if destination is empty', () => {
+    const params = {
+      products: [
+        { code: 'ART1', quantity: 2, pricePerUnit: 34.5, volume: 6000000, weight: 250 },
+        { code: 'ART2', quantity: 1, pricePerUnit: 89.90, volume: 40000000, weight: 450 },
+      ],
+      courier: 'DHL',
+      courierService: 'Standard',
+    };
+    const result = ShippingService.getShippingFees(params);
+    expect(result).to.have.property('requestValid', false);
+    expect(result).to.have.property('shippingFees', 0);
+    expect(result).to.have.property('message', 'Specificare la destinazione di spedizione');
+  });
+
+  it('should returns true if valid params are passed', () => {
+    const params = {
+      products: [
+        { code: 'ART1', quantity: 2, pricePerUnit: 34.5, volume: 6000000, weight: 250 },
+        { code: 'ART2', quantity: 1, pricePerUnit: 89.90, volume: 40000000, weight: 450 },
+      ],
+      courier: 'DHL',
+      courierService: 'Standard',
+      destination: 'ITA',
+    };
+    const result = ShippingService.getShippingFees(params);
+    expect(result).to.have.property('requestValid', true);
+    // expect(result).to.have.property('shippingFees', 0);
+    expect(result).to.have.property('message').to.be.empty;
   });
 });
