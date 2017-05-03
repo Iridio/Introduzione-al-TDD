@@ -1,3 +1,5 @@
+require("./models/couriers");
+
 module.exports = {
   getShippingFees(params) {
     if (typeof params === 'undefined') {
@@ -16,8 +18,15 @@ module.exports = {
       return { requestValid: false, shippingFees: 0, message: 'Specificare la destinazione di spedizione' };
     }
 
-    //Qui faremo tutti i calcoli delle spese di spedizione
+    //1. Looking for Courier
+    let courierParams = getCourier(params.courier);
+    if (courierParams === undefined) {
+      return { requestValid: false, shippingFees: 0, message: 'Corriere non identificato' };
+    }
 
-    return { requestValid: true, shippingFees: 0, message: '' };
-  },
+    // Qui implementeremo i test
+
+
+    return { requestValid: true, shippingFees: shippingFees, message: '' };
+  }  
 };
