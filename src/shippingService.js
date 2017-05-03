@@ -27,6 +27,15 @@ module.exports = {
     //2. Compute StandardShippingFees
     let shippingFees = getStandardShippingFees(params.products, courierParams.weights, courierParams.volumes);
 
+    //3. Chk FreeShipping
+    shippingFees = chkFreeShipping(shippingFees, params.products);
+
+    //4. ChkCourierService
+    shippingFees = addServiceCost(shippingFees, params.courierService);
+
+    //5. ChkDestination
+    shippingFees = addDestinationCost(shippingFees, params.courier, params.destination);
+
     return { requestValid: true, shippingFees: shippingFees, message: '' };
   }  
 };
