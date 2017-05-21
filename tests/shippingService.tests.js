@@ -71,7 +71,7 @@ describe('ShippingService Tests', () => {
     };
     const result = ShippingService.getShippingFees(params);
     expect(result).to.have.property('requestValid', true);
-    expect(result).to.have.property('shippingFees', 10.0);
+    expect(result).to.have.property('shippingFees', 0.0);
     expect(result).to.have.property('message').to.be.empty;
   });
 
